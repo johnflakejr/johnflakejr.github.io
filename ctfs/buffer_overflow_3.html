@@ -57,27 +57,27 @@ void vuln(){
 	printf("Ok... Now Where's the Flag?\n");
 	fflush(stdout);
 }
-
-
 	</pre> 
 	</div>
+	<div class="row">
+	<p>
+	With those two functions, our intended goal is to call the win() function, which reads the flag for us: 
+	</p>
 	<pre>
-
 void win() {
-  char buf[FLAGSIZE];
-  FILE *f = fopen("flag.txt","r");
-  if (f == NULL) {
-    printf("Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.\n");
-    exit(0);
-  }
+	char buf[FLAGSIZE];
+	FILE *f = fopen("flag.txt","r");
+	if (f == NULL) {
+		printf("Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server.\n");
+		exit(0);
+	}
 
-  fgets(buf,FLAGSIZE,f);
-  puts(buf);
-  fflush(stdout);
+	fgets(buf,FLAGSIZE,f);
+	puts(buf);
+	fflush(stdout);
 }
-
-
 	</pre>
+	</div>
 <a href="http://johnflakejr.github.io/">Back to Homepage</a>
 </div>
 </body>
