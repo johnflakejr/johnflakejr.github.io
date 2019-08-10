@@ -2,18 +2,25 @@
 <head>
 	<title>2018 picoCTF Buffer Overflow 3</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="../css/style.css">
+	
 </head>
 <body>
 <h1 class="jumbotron">2018 picoCTF Buffer Overflow 3 (in 2019)</h1>
 <div class="container">
 	<div class="row">
-	<p>As part of a fun activity for my Army company, we took a CTF from last year and all tried our hands at it.  Due to obvious reasons, the honor code was necessary for the event to be a success. Below is a writeup for the challenge titled "Buffer Overflow 3".
 	<br>
-	<h2>Buffer Overflow 3</h2>
-	<p>Prompt: It looks like Dr. Xernon added a stack canary to this program to protect against buffer overflows. Do you think you can bypass the protection and get the flag?</p>
+	<h5>Prompt: It looks like Dr. Xernon added a stack canary to this program to protect against buffer overflows. Do you think you can bypass the protection and get the flag?</h5>
 	</div>
 	<div class="row">
-	<p>In this problem, we are handed a vulnerable binary, and the source for that binary.  The first relevant thing the binary does is perform a call to read_canary(), which reads in the canary value to be put in the stack:</p> 
+	<br>
+	</div>
+	<div class="row">
+	<h5>In this problem, we are handed a vulnerable binary, and the source for that binary.  The first relevant thing the binary does is perform a call to read_canary(), which reads in the canary value to be put in the stack:</h5> 
+	<br>
+	</div>
+	<div class="row">
+	<kbd>
 	<pre>
 void read_canary() {
 	FILE *f = fopen("canary.txt","r");
@@ -26,11 +33,13 @@ void read_canary() {
   	fclose(f);
 }
 	</pre>
+	</kbd>
 	</div>
 	<div class="row">
-	<p>
-	The second relevant thing the binary does is make a call to vuln(): 
-	</p>
+	<h5>The second relevant thing the binary does is make a call to vuln():</h5>
+	</div>
+	<div class="row">
+	<kbd>
 	<pre> 
 void vuln(){
 	char canary[CANARY_SIZE];
@@ -58,11 +67,15 @@ void vuln(){
 	fflush(stdout);
 }
 	</pre> 
+	</kbd>
 	</div>
 	<div class="row">
-	<p>
+	<h5>
 	With those two functions, our intended goal is to call the win() function, which reads the flag for us: 
-	</p>
+	</h5>
+	</div>
+	<div class="row">
+	<kbd>
 	<pre>
 void win() {
 	char buf[FLAGSIZE];
@@ -77,8 +90,9 @@ void win() {
 	fflush(stdout);
 }
 	</pre>
+	</kbd>
 	</div>
-<a href="http://johnflakejr.github.io/">Back to Homepage</a>
+<h5><a href="http://johnflakejr.github.io/">Back to Homepage</a><h5>
 </div>
 </body>
 </html> 
