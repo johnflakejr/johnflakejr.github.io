@@ -3,6 +3,7 @@
 	<title>2018 picoCTF Buffer Overflow 3</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="../css/style.css">
+	<link rel="icon" href="../images/lake.png" />
 	
 </head>
 <body>
@@ -16,7 +17,7 @@
 	<br>
 	</div>
 	<div class="row">
-	<h5>In this problem, we are handed a vulnerable binary, and the source for that binary.  The first relevant thing the binary does is perform a call to read_canary(), which reads in the canary value to be put in the stack:</h5> 
+	<h5>In this problem, we are handed a vulnerable binary, and the source for that binary.  The first relevant thing the binary does is perform a call to read_canary(), which reads in the canary value (of 4 bytes, as CANARY_SIZE=4) to be put in the stack:</h5> 
 	<br>
 	</div>
 	<div class="row">
@@ -91,6 +92,39 @@ void win() {
 }
 	</pre>
 	</kbd>
+	<div class="row">
+	<h5>
+	With this in mind, we need to overflow the buffer (which uses the vulnerable gets() function) and overwrite the return address to redirect program execution to win().  The only issue here, though, is the stack canary.  We need to brute force this value.  Because this is only 4 bytes, it shouldn't be much of a problem.
+	</h5>
+	</div>
+	<div class="row">
+	<h5>First of all, we know that the buffer size is 32 bytes from one of the #define statements in the header of the source.  With this in mind, we can brute force the first byte of the stack canary as follows:</h5> 
+	<kbd>
+	<pre>
+$ for i in {0..127}; do echo $i; python -c "print '33\n' + 'A'*32 + chr($i) + '\n'" | ./vuln; done | grep -B2 'Flag'
+	</pre>
+	</kbd>
+	</div>
+	<div class="row">
+	<h5>Breaking this down, we are looping over all of the ascii values in the first portion of the command, and are putting them in the variable $i.  We print the value of $i every iteration, and then run binary, with varied input on each interation.  Each iteration, we tell the binary we are putting 33 bytes in the buffer (as a response to a prompt). We fill up the buffer with 32 "A" characters, and append the ascii representation of our variable, $i as the 33rd byte.  The last portion of the command looks for when $i is equal to the first byte of the canary.  Most of the time, the brute forced byte supplied will result in an error message, stating that the canary value is corrupted.  When $i=52, however, there is no such error message, indicating that the first value of the canary is the ascii representation of 52, which is "4"!  Here is the output of that command:</h5> 
+	<kbd>
+	<pre>
+52
+How Many Bytes will You Write Into the Buffer?
+> Input> Ok... Now Where's the Flag?
+	</pre>
+	</kbd>
+	</div>
+	</div>
+	<div class="row">
+	</div>
+	
+	<div class="row">
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
 	</div>
 </div>
 <div class="fixed-bottom navbar-dark bg-primary">
